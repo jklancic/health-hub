@@ -13,40 +13,72 @@ A Spring Boot REST API backend for health and fitness tracking. Supports user ma
 
 ## Requirements
 
+**With Docker (recommended):**
+- Docker and Docker Compose
+
+**Without Docker:**
 - Java 21
 - Maven 3.x
 - PostgreSQL
 
 ## Configuration
 
-The application requires the following environment variables or properties:
+Copy `.env.example` to `.env` and fill in the values:
 
-| Property | Description |
-|---|---|
-| `spring.datasource.url` | PostgreSQL connection URL |
-| `spring.datasource.username` | Database username |
-| `spring.datasource.password` | Database password |
-| `jwt.secret` | JWT signing secret |
-| `jwt.expiration` | JWT token expiration (ms) |
-| `cors.allowed-origins` | Comma-separated list of allowed origins |
-| `rate.limit.auth.capacity` | Max auth requests (default: 5) |
-| `rate.limit.auth.refill-minutes` | Auth rate limit window in minutes (default: 1) |
-| `rate.limit.api.capacity` | Max API requests (default: 100) |
-| `rate.limit.api.refill-minutes` | API rate limit window in minutes (default: 1) |
+```bash
+cp .env.example .env
+```
+
+| Variable | Description | Default |
+|---|---|---|
+| `DB_NAME` | PostgreSQL database name | — |
+| `DB_USERNAME` | Database username | — |
+| `DB_PASSWORD` | Database password | — |
+| `JWT_SECRET` | JWT signing secret | — |
+| `JWT_EXPIRATION` | JWT token expiration (ms) | `86400000` |
+| `CORS_ALLOWED_ORIGINS` | Comma-separated list of allowed origins | `http://localhost:5173` |
+| `SPRING_PROFILES_ACTIVE` | Active Spring profile | `prod` |
+
+Rate limiting can be tuned via Spring properties:
+
+| Property | Description | Default |
+|---|---|---|
+| `rate.limit.auth.capacity` | Max auth requests per window | `5` |
+| `rate.limit.auth.refill-minutes` | Auth rate limit window (minutes) | `1` |
+| `rate.limit.api.capacity` | Max API requests per window | `100` |
+| `rate.limit.api.refill-minutes` | API rate limit window (minutes) | `1` |
 
 ## Running
+
+**With Docker Compose:**
+
+```bash
+docker compose up
+```
+
+This starts PostgreSQL and the application together. Server starts on `http://localhost:8080`.
+
+**Without Docker:**
 
 ```bash
 mvn spring-boot:run
 ```
 
-Server starts on `http://localhost:8080`.
+Requires a running PostgreSQL instance configured via environment variables or `application.yml`.
 
 ## Build
 
+**Docker image:**
+
+```bash
+docker build -t health-hub .
+```
+
+**JAR:**
+
 ```bash
 mvn clean package
-java -jar target/health-hub-0.0.1-SNAPSHOT.jar
+java -jar target/health-hub-*.jar
 ```
 
 ## Authentication
