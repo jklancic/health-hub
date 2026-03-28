@@ -1,0 +1,31 @@
+package com.pharmadatahub.dto;
+
+public class UserResponse {
+    private String username;
+    private String email;
+    private String firstName;
+    private String lastName;
+
+    public UserResponse(String username, String email, String firstName, String lastName) {
+        this.username = username;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+}
