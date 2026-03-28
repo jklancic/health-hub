@@ -5,19 +5,44 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "user_profiles")
 public class UserProfile {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(name = "creation_date", nullable = false, updatable = false)
     private Instant creationDate;
 
+    @Column(name = "birth_date")
     private LocalDate birthDate;
+
+    @Column(name = "height")
     private Double height;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender")
     private Gender gender;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "units")
     private SystemOfUnits units;
 
-
-    @Column(name = "user_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
     
     public UserProfile() {
@@ -30,6 +55,13 @@ public class UserProfile {
         this.height = height;
         this.gender = gender;
         this.units = units;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        if (creationDate == null) {
+            creationDate = Instant.now();
+        }
     }
 
     public UUID getId() {
