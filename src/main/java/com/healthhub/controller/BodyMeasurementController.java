@@ -1,5 +1,6 @@
 package com.healthhub.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.healthhub.dto.BodyMeasurementDTO;
+import com.healthhub.dto.WeeklyAverageDTO;
 import com.healthhub.entity.BodyMeasurement;
 import com.healthhub.service.BodyMeasurementService;
 
@@ -78,5 +81,14 @@ public class BodyMeasurementController {
             @PathVariable UUID measurementId) {
         bodyMeasurementService.deleteBodyMeasurement(measurementId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('SUPERADMIN') or principal.id == #userId")
+    @GetMapping("/weekly-averages")
+    public ResponseEntity<List<WeeklyAverageDTO>> getWeeklyAverages(
+            @PathVariable UUID userId,
+            @RequestParam(defaultValue = "5") int weeks) {
+        List<WeeklyAverageDTO> averages = bodyMeasurementService.getWeeklyAverages(userId, weeks);
+        return ResponseEntity.ok(averages);
     }
 }
