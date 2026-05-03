@@ -14,7 +14,7 @@ import java.util.UUID;
 @Repository
 public interface WorkoutSessionRepository extends JpaRepository<WorkoutSession, UUID> {
 
-    @Query("SELECT s FROM WorkoutSession s WHERE s.user.id = :userId ORDER BY s.date DESC")
+    @Query("SELECT s FROM WorkoutSession s WHERE s.user.id = :userId ORDER BY s.startedAt DESC")
     Page<WorkoutSession> findByUserIdOrderByDateDesc(@Param("userId") UUID userId, Pageable pageable);
 
     @Query("SELECT s FROM WorkoutSession s WHERE s.id = :id AND s.user.id = :userId")
